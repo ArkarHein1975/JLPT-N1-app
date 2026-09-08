@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>第1章 漢字読み</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .home-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    padding: 10px 18px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+
+    font-size: 16px;
+    z-index: 1000;
+}
+
+.home-button:hover {
+    background-color: #555;
+}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+        }
+
+        th {
+            background-color: #eeeeee;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>第1章</h1>
+    <h2>漢字読み</h2>
+
+    <div class="buttons">
+        <button onclick="toggleHiragana()">
+            ひらがななし
+        </button>
+
+        <button onclick="toggleTranslation()">
+            翻訳
+        </button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>漢字</th>
+            <th id="hiraganaHeader">ひらがな</th>
+            <th id="translationHeader">翻訳</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="word, stat : ${words}">
+            <td th:text="${currentPage * 20 + stat.count}"></td>
+
+            <td th:text="${word.kanji}"></td>
+
+            <td class="hiragana"
+                th:text="${word.hiragana}">
+            </td>
+
+            <td class="translation"
+                th:text="${word.translation}">
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+<div class="pagination">
+
+    <!-- 前へ -->
+    <a th:if="${currentPage > 0}"
+       th:href="@{/chapter1(page=${currentPage - 1})}">
+        <button>前へ</button>
+    </a>
+
+    <!-- 次へ -->
+    <a th:if="${hasNext}"
+       th:href="@{/chapter1(page=${currentPage + 1})}">
+        <button>次へ</button>
+    </a>
+<div>
+    <span th:text="${currentPage + 1} "></span>/
+    <span th:text="${totalPages}"></span>
+</div>
+</div>
+<a href="/category" class="home-button">Home</a>
+<script>
+
+    function toggleHiragana() {
+
+        const cells = document.querySelectorAll(".hiragana");
+        const header = document.getElementById("hiraganaHeader");
+
+        cells.forEach(function(cell) {
+
+            if (cell.style.display === "none") {
+                cell.style.display = "";
+            } else {
+                cell.style.display = "none";
+            }
+
+        });
+
+        if (header.style.display === "none") {
+            header.style.display = "";
+        } else {
+            header.style.display = "none";
+        }
+    }
+
+
+    function toggleTranslation() {
+
+        const cells = document.querySelectorAll(".translation");
+        const header = document.getElementById("translationHeader");
+
+        cells.forEach(function(cell) {
+
+            if (cell.style.display === "none") {
+                cell.style.display = "";
+            } else {
+                cell.style.display = "none";
+            }
+
+        });
+
+        if (header.style.display === "none") {
+            header.style.display = "";
+        } else {
+            header.style.display = "none";
+        }
+    }
+
+</script>
+
+</body>
+</html>

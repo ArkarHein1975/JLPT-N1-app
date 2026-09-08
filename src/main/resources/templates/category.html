@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JLPT N1 - カテゴリー</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            width: 800px;
+            max-width: 90%;
+            margin: 80px auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .category-button {
+            display: block;
+            padding: 22px;
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #333;
+            font-size: 22px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            transition: 0.2s;
+        }
+
+        .category-button:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+        .chapter {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>カテゴリー</h1>
+
+        <div class="category-list">
+
+            <a href="/chapter1" class="category-button">
+                <div class="chapter">第1章</div>
+                <div class="title">漢字読み</div>
+            </a>
+
+            <a href="/chapter2" class="category-button">
+                <div class="chapter">第2章</div>
+                <div class="title">文脈規定</div>
+            </a>
+
+            <a href="/chapter3" class="category-button">
+                <div class="chapter">第3章</div>
+                <div class="title">言い換える類義</div>
+            </a>
+
+            <a href="/chapter4" class="category-button">
+                <div class="chapter">第4章</div>
+                <div class="title">用法</div>
+            </a>
+
+            <a href="/chapter5" class="category-button">
+                <div class="chapter">第5章</div>
+                <div class="title">オノマトペ</div>
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
