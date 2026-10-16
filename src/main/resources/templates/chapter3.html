@@ -24,22 +24,31 @@
 
         /* 左なし・右なし */
 
-        .control-buttons {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+       /* 左なし・右なし */
 
-        .control-buttons button {
-            padding: 8px 22px;
-            margin: 0 5px;
-            cursor: pointer;
-            font-size: 15px;
-        }
+.bottom-buttons {
+    position: fixed;
+    bottom: 75px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-        .control-buttons button.active {
-            background-color: #333;
-            color: white;
-        }
+.control-button {
+    width: 132px;
+    padding: 10px 18px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.control-button.active {
+    background-color: #333;
+}
 
 
         /* Table */
@@ -130,7 +139,38 @@
             margin: 0 10px;
             cursor: pointer;
         }
+.page-jump {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
 
+.page-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.page-number {
+    margin-bottom: 5px;
+}
+
+.page-number select {
+    padding: 4px 8px;
+    font-size: 14px;
+}
+
+.page-jump button {
+    padding: 5px 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
 
         /* Home */
 
@@ -158,19 +198,21 @@
 
     <!-- 左なし・右なし -->
 
-    <div class="control-buttons">
+    <div class="bottom-buttons">
 
-        <button id="leftButton"
-                onclick="toggleLeft()">
-            左なし
-        </button>
+    <button id="leftButton"
+            class="control-button"
+            onclick="toggleLeft()">
+        左なし
+    </button>
 
-        <button id="rightButton"
-                onclick="toggleRight()">
-            右なし
-        </button>
+    <button id="rightButton"
+            class="control-button"
+            onclick="toggleRight()">
+        右なし
+    </button>
 
-    </div>
+</div>
 
 
     <!-- Table -->
@@ -309,7 +351,35 @@
 
     </div>
 
+<!-- Page Jump -->
+<div class="page-jump">
 
+    <div class="page-title">
+        Page
+    </div>
+
+    <div class="page-number">
+
+        <select id="pageSelect">
+
+            <option th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:value="${i - 1}"
+                    th:text="${i}"
+                    th:selected="${i - 1 == currentPage}">
+            </option>
+
+        </select>
+
+        /
+        <span th:text="${totalPages}"></span>
+
+    </div>
+
+    <button onclick="goToPage()">
+        移動
+    </button>
+
+</div>
     <!-- Home -->
 
     <a href="/category"
@@ -453,6 +523,14 @@
 
             rightButton.classList.add("active");
         }
+        function goToPage() {
+
+    const page =
+        document.getElementById("pageSelect").value;
+
+    window.location.href =
+        "/chapter3?page=" + page;
+}
 
     </script>
 

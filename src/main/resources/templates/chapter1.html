@@ -27,36 +27,104 @@
             margin-bottom: 30px;
         }
 
-        .buttons {
-            margin-bottom: 20px;
+        /* =========================
+           Fixed buttons
+           ========================= */
+
+        .fixed-buttons {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            z-index: 1000;
         }
 
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+        .fixed-buttons button,
         .home-button {
+            width: 130px;
+            padding: 10px 12px;
+
+            border: none;
+            border-radius: 8px;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+
+            box-sizing: border-box;
+        }
+
+        /* Green buttons */
+
+        .green-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .green-button:hover {
+            background-color: #218838;
+        }
+
+        /* Page Jump */
+
+.page-jump {
     position: fixed;
-    bottom: 20px;
+    top: 20px;
     right: 20px;
 
-    padding: 10px 18px;
-    background-color: #333;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
+    background-color: white;
+    padding: 10px 15px;
 
-    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+
+    text-align: center;
+
     z-index: 1000;
 }
 
-.home-button:hover {
-    background-color: #555;
+.page-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
+
+.page-number {
+    margin-bottom: 5px;
+}
+
+.page-number select {
+    padding: 4px 8px;
+    font-size: 14px;
+}
+
+.page-jump button {
+    padding: 5px 15px;
+    cursor: pointer;
+    font-size: 14px;
+}/* Home button */
+
+        .home-button {
+            background-color: #333;
+            color: white;
+        }
+        
+
+        .home-button:hover {
+            background-color: #555;
+        }
+
+        /* =========================
+           Table
+           ========================= */
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -72,6 +140,26 @@
         th {
             background-color: #eeeeee;
         }
+
+        /* =========================
+           Pagination
+           ========================= */
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            margin: 5px;
+
+            border: none;
+            border-radius: 6px;
+
+            cursor: pointer;
+            font-size: 16px;
+        }
+
     </style>
 </head>
 
@@ -81,16 +169,6 @@
 
     <h1>第1章</h1>
     <h2>漢字読み</h2>
-
-    <div class="buttons">
-        <button onclick="toggleHiragana()">
-            ひらがななし
-        </button>
-
-        <button onclick="toggleTranslation()">
-            翻訳
-        </button>
-    </div>
 
     <table>
         <thead>
@@ -105,6 +183,7 @@
         <tbody>
 
         <tr th:each="word, stat : ${words}">
+
             <td th:text="${currentPage * 20 + stat.count}"></td>
 
             <td th:text="${word.kanji}"></td>
@@ -116,36 +195,100 @@
             <td class="translation"
                 th:text="${word.translation}">
             </td>
+
         </tr>
 
         </tbody>
     </table>
 
-<div class="pagination">
+    <div class="pagination">
 
-    <!-- 前へ -->
-    <a th:if="${currentPage > 0}"
-       th:href="@{/chapter1(page=${currentPage - 1})}">
-        <button>前へ</button>
-    </a>
+        <!-- 前へ -->
+        <a th:if="${currentPage > 0}"
+           th:href="@{/chapter1(page=${currentPage - 1})}">
+            <button>前へ</button>
+        </a>
 
-    <!-- 次へ -->
-    <a th:if="${hasNext}"
-       th:href="@{/chapter1(page=${currentPage + 1})}">
-        <button>次へ</button>
+        <!-- 次へ -->
+        <a th:if="${hasNext}"
+           th:href="@{/chapter1(page=${currentPage + 1})}">
+            <button>次へ</button>
+        </a>
+
+        <div>
+            <span th:text="${currentPage + 1}"></span> /
+            <span th:text="${totalPages}"></span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     Fixed buttons
+     ========================= -->
+
+<div class="fixed-buttons">
+
+    <button  class="green-button"
+            onclick="toggleHiragana()">
+        ひらがななし
+    </button>
+
+    <button class="green-button"
+            onclick="toggleTranslation()">
+        翻訳なし
+    </button>
+<!-- Page Jump -->
+<div class="page-jump">
+
+    <div class="page-title">
+        Page
+    </div>
+
+    <div class="page-number">
+
+        <select id="pageSelect">
+
+            <option th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:value="${i - 1}"
+                    th:text="${i}"
+                    th:selected="${i - 1 == currentPage}">
+            </option>
+
+        </select>
+
+        /
+        <span th:text="${totalPages}"></span>
+
+    </div>
+
+    <button onclick="goToPage()">
+        移動
+    </button>
+
+</div>
+    <a href="/category"
+       class="home-button">
+        Home
     </a>
-<div>
-    <span th:text="${currentPage + 1} "></span>/
-    <span th:text="${totalPages}"></span>
 </div>
-</div>
-<a href="/category" class="home-button">Home</a>
+
+
 <script>
+
+    // =========================
+    // ひらがな ON / OFF
+    // =========================
 
     function toggleHiragana() {
 
-        const cells = document.querySelectorAll(".hiragana");
-        const header = document.getElementById("hiraganaHeader");
+        const cells =
+            document.querySelectorAll(".hiragana");
+
+        const header =
+            document.getElementById("hiraganaHeader");
 
         cells.forEach(function(cell) {
 
@@ -164,11 +307,18 @@
         }
     }
 
+
+    // =========================
+    // 翻訳 ON / OFF
+    // =========================
 
     function toggleTranslation() {
 
-        const cells = document.querySelectorAll(".translation");
-        const header = document.getElementById("translationHeader");
+        const cells =
+            document.querySelectorAll(".translation");
+
+        const header =
+            document.getElementById("translationHeader");
 
         cells.forEach(function(cell) {
 
@@ -186,6 +336,14 @@
             header.style.display = "none";
         }
     }
+    function goToPage() {
+
+    const page =
+        document.getElementById("pageSelect").value;
+
+    window.location.href =
+        "/chapter1?page=" + page;
+}
 
 </script>
 

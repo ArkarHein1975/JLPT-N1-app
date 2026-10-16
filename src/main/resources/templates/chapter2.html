@@ -94,7 +94,38 @@
             margin: 0 10px;
             cursor: pointer;
         }
+.page-jump {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
 
+.page-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.page-number {
+    margin-bottom: 5px;
+}
+
+.page-number select {
+    padding: 4px 8px;
+    font-size: 14px;
+}
+
+.page-jump button {
+    padding: 5px 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
         .home-button {
             position: fixed;
             bottom: 20px;
@@ -264,7 +295,35 @@
 
     </div>
 
+<!-- Page Jump -->
+<div class="page-jump">
 
+    <div class="page-title">
+        Page
+    </div>
+
+    <div class="page-number">
+
+        <select id="pageSelect">
+
+            <option th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:value="${i - 1}"
+                    th:text="${i}"
+                    th:selected="${i - 1 == currentPage}">
+            </option>
+
+        </select>
+
+        /
+        <span th:text="${totalPages}"></span>
+
+    </div>
+
+    <button onclick="goToPage()">
+        移動
+    </button>
+
+</div>
     <!-- ==================== -->
     <!-- Home -->
     <!-- ==================== -->
@@ -474,6 +533,14 @@
             }
 
         }
+        function goToPage() {
+
+    const page =
+        document.getElementById("pageSelect").value;
+
+    window.location.href =
+        "/chapter2?page=" + page;
+}
 
     </script>
 
