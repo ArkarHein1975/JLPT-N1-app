@@ -3,92 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <title>第2章 文脈規定</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
         }
-
         h1 {
             text-align: center;
             margin-bottom: 5px;
         }
-
         h2 {
             text-align: center;
             margin-top: 5px;
             margin-bottom: 30px;
         }
-
         table {
             width: 95%;
             margin: auto;
             border-collapse: collapse;
         }
-
         th, td {
             border: 1px solid #333;
             padding: 10px;
         }
-
         th {
             background-color: #eeeeee;
             text-align: center;
         }
-
         .no {
             width: 7%;
             text-align: center;
         }
-
         .kanji {
             width: 18%;
             text-align: center;
             font-size: 20px;
             font-weight: bold;
         }
-
         .hiragana {
             width: 20%;
             text-align: center;
         }
-
         .translation {
             width: 25%;
             text-align: left;
         }
-
-        /* အစမှာ ひらがな / 翻訳 မပြ */
+        /* in beginnig ひらがな / 翻訳 noshow */
         .answer {
             display: none;
         }
-
-        /* Click လုပ်ပြီးမှ ပြ */
+        /* after Click show*/
         .answer.show {
             display: inline;
         }
-
         .example {
             text-align: left;
             padding: 12px 15px;
             font-size: 16px;
             background-color: #fafafa;
         }
-
-        /* Example ထဲက target word */
+        /* Example target word */
         .target-word {
             color: green;
             text-decoration: underline;
             font-weight: bold;
             cursor: pointer;
         }
-
         .pagination {
             text-align: center;
             margin-top: 30px;
         }
-
         .pagination button {
             padding: 8px 18px;
             margin: 0 10px;
@@ -105,22 +89,18 @@
     text-align: center;
     z-index: 1000;
 }
-
 .page-title {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
 }
-
 .page-number {
     margin-bottom: 5px;
 }
-
 .page-number select {
     padding: 4px 8px;
     font-size: 14px;
 }
-
 .page-jump button {
     padding: 5px 15px;
     cursor: pointer;
@@ -138,15 +118,10 @@
         }
     </style>
 </head>
-
 <body>
-
     <h1>第2章</h1>
     <h2>文脈規定</h2>
-
-
     <table>
-
         <thead>
             <tr>
                 <th class="no">No.</th>
@@ -155,28 +130,17 @@
                 <th class="translation">翻訳</th>
             </tr>
         </thead>
-
-
         <tbody>
-
             <th:block th:each="word, stat : ${words}">
-
-                <!-- ==================== -->
                 <!-- Word -->
-                <!-- ==================== -->
-
                 <tr>
-
                     <td class="no"
                         th:text="${currentPage * 10 + stat.count}">
                     </td>
-
-
                     <!--
                         kanji ရှိရင် kanji ကိုပြမယ်။
                         kanji မရှိရင် hiragana ကိုပြမယ်။
                     -->
-
                     <td class="kanji"
                         th:text="${word.kanji != null 
                                   and word.kanji != '-' 
@@ -184,51 +148,27 @@
                                   ? word.kanji 
                                   : word.hiragana}">
                     </td>
-
-
-                    <!-- ==================== -->
                     <!-- ひらがな -->
-                    <!-- ==================== -->
-
                     <td class="hiragana">
-
                         <span class="answer"
                               th:id="'hiragana-' + ${word.id}"
                               th:text="${word.hiragana}">
                         </span>
-
                     </td>
-
-
-                    <!-- ==================== -->
                     <!-- 翻訳 -->
-                    <!-- ==================== -->
-
                     <td class="translation">
-
                         <span class="answer"
                               th:id="'translation-' + ${word.id}"
                               th:text="${word.translation}">
                         </span>
-
                     </td>
-
                 </tr>
-
-
-                <!-- ==================== -->
                 <!-- Example sentence -->
-                <!-- ==================== -->
-
                 <tr>
-
                     <td></td>
-
                     <td colspan="3"
                         class="example">
-
                         <span class="example-text"
-
                               th:attr="data-target=${
                                   word.targetWord != null
                                   and word.targetWord != '-'
@@ -236,313 +176,187 @@
                                   ? word.targetWord
                                   : word.hiragana
                               },
-
                               data-id=${word.id}"
-
                               th:text="${word.example}">
                         </span>
-
                     </td>
-
                 </tr>
-
             </th:block>
-
         </tbody>
-
     </table>
-
-
-    <!-- ==================== -->
     <!-- Pagination -->
-    <!-- ==================== -->
-
     <div class="pagination">
-
         <!-- 前へ -->
-
         <a th:if="${hasPrevious}"
            th:href="@{/chapter2(page=${currentPage - 1})}">
-
             <button>前へ</button>
-
         </a>
-
-
         <!-- Page Number -->
-
         <span>
-
             <span th:text="${currentPage + 1}">
             </span>
-
-            /
-
             <span th:text="${totalPages}">
             </span>
-
         </span>
-
-
         <!-- 次へ -->
-
         <a th:if="${hasNext}"
            th:href="@{/chapter2(page=${currentPage + 1})}">
-
             <button>次へ</button>
-
         </a>
-
     </div>
-
 <!-- Page Jump -->
 <div class="page-jump">
-
     <div class="page-title">
         Page
     </div>
-
     <div class="page-number">
-
         <select id="pageSelect">
-
             <option th:each="i : ${#numbers.sequence(1, totalPages)}"
                     th:value="${i - 1}"
                     th:text="${i}"
                     th:selected="${i - 1 == currentPage}">
             </option>
-
         </select>
-
-        /
         <span th:text="${totalPages}"></span>
-
     </div>
-
     <button onclick="goToPage()">
         移動
     </button>
-
 </div>
-    <!-- ==================== -->
     <!-- Home -->
-    <!-- ==================== -->
-
     <a href="/category"
        class="home-button">
         Home
     </a>
-
-
-    <!-- ==================== -->
     <!-- JavaScript -->
-    <!-- ==================== -->
-
     <script>
-
         document.addEventListener("DOMContentLoaded", function () {
-
             const examples =
                 document.querySelectorAll(".example-text");
-
-
             examples.forEach(function (element) {
-
                 /*
                  * Database ထဲက target_word
                  * ဒါမှမဟုတ် hiragana ကိုယူမယ်
                  */
-
                 const target =
                     element.getAttribute("data-target");
-
-
                 const id =
                     element.getAttribute("data-id");
-
-
                 /*
                  * Target မရှိရင် ဘာမှမလုပ်
                  */
-
                 if (!target || target === "-") {
                     return;
                 }
-
-
                 /*
                  * Example sentence
                  */
-
                 const text =
                     element.textContent;
-
-
                 /*
                  * Example ထဲမှာ target word
                  * ဘယ်နေရာမှာရှိလဲရှာ
                  */
-
                 const index =
                     text.indexOf(target);
-
-
                 /*
                  * Example ထဲမှာ target မတွေ့ရင်
                  * error မဖြစ်အောင် ပုံမှန်အတိုင်းထား
                  */
-
                 if (index === -1) {
                     return;
                 }
-
-
                 /*
                  * Target word မတိုင်ခင်စာ
                  */
-
                 const before =
                     text.substring(0, index);
-
-
                 /*
                  * Target word နောက်ကစာ
                  */
-
                 const after =
                     text.substring(
                         index + target.length
                     );
-
-
                 /*
                  * မူလစာသားကို ဖျက်
                  */
-
                 element.textContent = "";
-
-
                 /*
                  * Target မတိုင်ခင်စာ ပြန်ထည့်
                  */
-
                 element.appendChild(
                     document.createTextNode(before)
                 );
-
-
                 /*
                  * Target word
                  */
-
                 const targetSpan =
                     document.createElement("span");
-
-
                 targetSpan.className =
                     "target-word";
-
-
                 targetSpan.textContent =
                     target;
-
-
                 targetSpan.setAttribute(
                     "data-id",
                     id
                 );
-
-
                 /*
                  * Click လုပ်တဲ့အခါ
                  * ひらがな / 翻訳
                  * ပေါ် / ပျောက် toggle လုပ်မယ်
                  */
-
                 targetSpan.onclick =
                     function () {
-
                         showAnswer(this);
-
                     };
-
-
                 /*
                  * Target word ထည့်
                  */
-
                 element.appendChild(
                     targetSpan
                 );
-
-
                 /*
                  * Target နောက်ကစာ ထည့်
                  */
-
                 element.appendChild(
                     document.createTextNode(after)
                 );
-
             });
-
         });
-
-
         /*
          * Target word ကို click လုပ်တဲ့ function
          */
-
         function showAnswer(element) {
-
             const id =
                 element.getAttribute("data-id");
-
-
             const hiragana =
                 document.getElementById(
                     "hiragana-" + id
                 );
-
-
             const translation =
                 document.getElementById(
                     "translation-" + id
                 );
-
-
             /*
              * ひらがな
              */
-
             if (hiragana) {
-
                 hiragana.classList.toggle("show");
-
             }
-
-
             /*
              * 翻訳
              */
-
             if (translation) {
-
                 translation.classList.toggle("show");
-
             }
-
         }
         function goToPage() {
-
     const page =
         document.getElementById("pageSelect").value;
-
     window.location.href =
         "/chapter2?page=" + page;
 }
-
     </script>
-
 </body>
 </html>

@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>第1章 漢字読み</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,25 +11,18 @@
             margin: 0;
             padding: 40px;
         }
-
         .container {
             max-width: 900px;
             margin: auto;
             text-align: center;
         }
-
         h1 {
             margin-bottom: 10px;
         }
-
         h2 {
             margin-bottom: 30px;
         }
-
-        /* =========================
-           Fixed buttons
-           ========================= */
-
+        /*Fixed buttons*/
         .fixed-buttons {
             position: fixed;
             right: 20px;
@@ -42,134 +34,96 @@
 
             z-index: 1000;
         }
-
         .fixed-buttons button,
         .home-button {
             width: 130px;
             padding: 10px 12px;
-
             border: none;
             border-radius: 8px;
-
             font-size: 15px;
             font-weight: bold;
-
             cursor: pointer;
             text-align: center;
             text-decoration: none;
-
             box-sizing: border-box;
         }
-
         /* Green buttons */
-
         .green-button {
             background-color: #28a745;
             color: white;
         }
-
         .green-button:hover {
             background-color: #218838;
         }
-
         /* Page Jump */
-
 .page-jump {
     position: fixed;
     top: 20px;
     right: 20px;
-
     background-color: white;
     padding: 10px 15px;
-
     border: 1px solid #ccc;
     border-radius: 10px;
-
     text-align: center;
-
     z-index: 1000;
 }
-
 .page-title {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
 }
-
 .page-number {
     margin-bottom: 5px;
 }
-
 .page-number select {
     padding: 4px 8px;
     font-size: 14px;
 }
-
 .page-jump button {
     padding: 5px 15px;
     cursor: pointer;
     font-size: 14px;
-}/* Home button */
-
+}
+/* Home button */
         .home-button {
             background-color: #333;
             color: white;
         }
-        
-
         .home-button:hover {
             background-color: #555;
         }
-
-        /* =========================
-           Table
-           ========================= */
-
+        /* Table*/
         table {
             width: 100%;
             border-collapse: collapse;
             background-color: white;
         }
-
         th,
         td {
             border: 1px solid #ccc;
             padding: 12px;
         }
-
         th {
             background-color: #eeeeee;
         }
-
-        /* =========================
-           Pagination
-           ========================= */
-
+        /* Pagination*/
         .pagination {
             margin-top: 20px;
         }
-
         .pagination button {
             padding: 10px 20px;
             margin: 5px;
-
             border: none;
             border-radius: 6px;
-
             cursor: pointer;
             font-size: 16px;
         }
-
     </style>
 </head>
-
 <body>
-
 <div class="container">
-
     <h1>第1章</h1>
     <h2>漢字読み</h2>
-
     <table>
         <thead>
         <tr>
@@ -179,157 +133,103 @@
             <th id="translationHeader">翻訳</th>
         </tr>
         </thead>
-
         <tbody>
-
         <tr th:each="word, stat : ${words}">
-
             <td th:text="${currentPage * 20 + stat.count}"></td>
-
             <td th:text="${word.kanji}"></td>
-
             <td class="hiragana"
                 th:text="${word.hiragana}">
             </td>
-
             <td class="translation"
                 th:text="${word.translation}">
             </td>
-
         </tr>
-
         </tbody>
     </table>
-
     <div class="pagination">
-
         <!-- 前へ -->
         <a th:if="${currentPage > 0}"
            th:href="@{/chapter1(page=${currentPage - 1})}">
             <button>前へ</button>
         </a>
-
         <!-- 次へ -->
         <a th:if="${hasNext}"
            th:href="@{/chapter1(page=${currentPage + 1})}">
             <button>次へ</button>
         </a>
-
         <div>
             <span th:text="${currentPage + 1}"></span> /
             <span th:text="${totalPages}"></span>
         </div>
-
     </div>
-
 </div>
-
-
-<!-- =========================
-     Fixed buttons
-     ========================= -->
-
+<!--Fixed buttons-->
 <div class="fixed-buttons">
-
     <button  class="green-button"
             onclick="toggleHiragana()">
         ひらがななし
     </button>
-
     <button class="green-button"
             onclick="toggleTranslation()">
         翻訳なし
     </button>
 <!-- Page Jump -->
 <div class="page-jump">
-
     <div class="page-title">
         Page
     </div>
-
     <div class="page-number">
-
         <select id="pageSelect">
-
             <option th:each="i : ${#numbers.sequence(1, totalPages)}"
                     th:value="${i - 1}"
                     th:text="${i}"
                     th:selected="${i - 1 == currentPage}">
             </option>
-
         </select>
-
-        /
         <span th:text="${totalPages}"></span>
-
     </div>
-
     <button onclick="goToPage()">
         移動
     </button>
-
 </div>
     <a href="/category"
        class="home-button">
         Home
     </a>
 </div>
-
-
 <script>
-
-    // =========================
     // ひらがな ON / OFF
-    // =========================
-
     function toggleHiragana() {
-
         const cells =
             document.querySelectorAll(".hiragana");
-
         const header =
             document.getElementById("hiraganaHeader");
-
         cells.forEach(function(cell) {
-
             if (cell.style.display === "none") {
                 cell.style.display = "";
             } else {
                 cell.style.display = "none";
             }
-
         });
-
         if (header.style.display === "none") {
             header.style.display = "";
         } else {
             header.style.display = "none";
         }
     }
-
-
-    // =========================
     // 翻訳 ON / OFF
-    // =========================
-
     function toggleTranslation() {
-
         const cells =
             document.querySelectorAll(".translation");
-
         const header =
             document.getElementById("translationHeader");
-
         cells.forEach(function(cell) {
-
             if (cell.style.display === "none") {
                 cell.style.display = "";
             } else {
                 cell.style.display = "none";
             }
-
         });
-
         if (header.style.display === "none") {
             header.style.display = "";
         } else {
@@ -337,15 +237,11 @@
         }
     }
     function goToPage() {
-
     const page =
         document.getElementById("pageSelect").value;
-
     window.location.href =
         "/chapter1?page=" + page;
 }
-
 </script>
-
 </body>
 </html>
